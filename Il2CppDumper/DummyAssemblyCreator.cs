@@ -87,7 +87,7 @@ namespace Il2CppDumper
                 {
                     var interfaceType = il2cpp.types[metadata.interfaceIndices[typeDef.interfacesStart + i]];
                     var interfaceTypeRef = GetTypeReference(typeDefinition, interfaceType);
-                    typeDefinition.Interfaces.Add(interfaceTypeRef);
+                    // typeDefinition.Interfaces.Add(interfaceTypeRef);
                 }
             }
             //处理field, method, property等等
@@ -332,7 +332,7 @@ namespace Il2CppDumper
                 case Il2CppTypeEnum.IL2CPP_TYPE_OBJECT:
                     return moduleDefinition.Import(typeof(object));
                 case Il2CppTypeEnum.IL2CPP_TYPE_VOID:
-                    return moduleDefinition.Import(typeof(void));
+                    return moduleDefinition.ImportReference(typeof(void));
                 case Il2CppTypeEnum.IL2CPP_TYPE_BOOLEAN:
                     return moduleDefinition.Import(typeof(bool));
                 case Il2CppTypeEnum.IL2CPP_TYPE_CHAR:
@@ -350,9 +350,9 @@ namespace Il2CppDumper
                 case Il2CppTypeEnum.IL2CPP_TYPE_U4:
                     return moduleDefinition.Import(typeof(uint));
                 case Il2CppTypeEnum.IL2CPP_TYPE_I:
-                    return moduleDefinition.Import(typeof(IntPtr));
+                    return moduleDefinition.ImportReference(typeof(IntPtr));
                 case Il2CppTypeEnum.IL2CPP_TYPE_U:
-                    return moduleDefinition.Import(typeof(UIntPtr));
+                    return moduleDefinition.ImportReference(typeof(UIntPtr));
                 case Il2CppTypeEnum.IL2CPP_TYPE_I8:
                     return moduleDefinition.Import(typeof(long));
                 case Il2CppTypeEnum.IL2CPP_TYPE_U8:
@@ -364,7 +364,7 @@ namespace Il2CppDumper
                 case Il2CppTypeEnum.IL2CPP_TYPE_STRING:
                     return moduleDefinition.Import(typeof(string));
                 case Il2CppTypeEnum.IL2CPP_TYPE_TYPEDBYREF:
-                    return moduleDefinition.Import(typeof(TypedReference));
+                    return moduleDefinition.ImportReference(typeof(TypedReference));
                 case Il2CppTypeEnum.IL2CPP_TYPE_CLASS:
                 case Il2CppTypeEnum.IL2CPP_TYPE_VALUETYPE:
                     {

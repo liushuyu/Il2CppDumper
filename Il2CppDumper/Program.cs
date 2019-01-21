@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using static Il2CppDumper.DefineConstants;
 
 namespace Il2CppDumper
@@ -14,14 +13,14 @@ namespace Il2CppDumper
     {
         private static Metadata metadata;
         private static Il2Cpp il2cpp;
-        private static Config config = new JavaScriptSerializer().Deserialize<Config>(File.ReadAllText(Application.StartupPath + Path.DirectorySeparatorChar + @"config.json"));
+        private static Config config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(System.IO.Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + @"config.json"));
         private static Dictionary<Il2CppMethodDefinition, string> methodModifiers = new Dictionary<Il2CppMethodDefinition, string>();
         private static Dictionary<Il2CppTypeDefinition, int> typeDefImageIndices = new Dictionary<Il2CppTypeDefinition, int>();
 
         static void ShowHelp(string programName)
         {
             Console.WriteLine($"usage: {programName} path/to/global-metadata.dat path/to/libil2cpp.so");
-            Application.ExitThread();
+            Environment.Exit(1);
         }
 
         [STAThread]
@@ -60,6 +59,7 @@ namespace Il2CppDumper
                     metadataBytes = file2;
                 }
             }
+            #if NET40
             if (il2cppBytes == null)
             {
                 var ofd = new OpenFileDialog();
@@ -82,6 +82,14 @@ namespace Il2CppDumper
                     return;
                 }
             }
+            #else
+            if (il2cppBytes == null)
+            {
+                Console.WriteLine("global-metadata or Il2Cpp binary file not specified.");
+                ShowHelp(AppDomain.CurrentDomain.FriendlyName);
+                return;
+            }
+            #endif
             try
             {
                 if (Init(il2cppBytes, metadataBytes))
