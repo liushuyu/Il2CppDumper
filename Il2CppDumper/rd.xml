@@ -1,0 +1,7 @@
+<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
+<Application>
+    <Assembly Name="System.Linq.Expressions"  Dynamic="Required All" />
+    <Assembly Name="System.IO"  Dynamic="Required All" />
+    <Assembly Name="System.Runtime.Extensions"  Dynamic="Required All" />
+</Application>
+</Directives>
