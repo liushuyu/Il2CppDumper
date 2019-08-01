@@ -264,8 +264,10 @@ namespace Il2CppDumper
             var writer = new StreamWriter(new FileStream("dump.cs", FileMode.Create), new UTF8Encoding(false));
             Console.WriteLine("Dumping...");
             //Script
-            var scriptwriter = new StreamWriter(new FileStream("script.py", FileMode.Create), new UTF8Encoding(false));
-            scriptwriter.WriteLine(Resource1.ida);
+            var me = typeof(Program).Assembly;
+            var fileStream = new FileStream("script.py", FileMode.Create);
+            var scriptwriter = new StreamWriter(fileStream, new UTF8Encoding(false));
+            me.GetManifestResourceStream("Il2CppDumper.Resources.ida.py").CopyTo(fileStream);
             //dump image
             for (var imageIndex = 0; imageIndex < metadata.imageDefs.Length; imageIndex++)
             {
@@ -674,6 +676,7 @@ namespace Il2CppDumper
             //writer close
             writer.Close();
             scriptwriter.Close();
+            fileStream.Close();
             Console.WriteLine("Done !");
             //DummyDll
             if (config.DummyDll)
@@ -683,7 +686,6 @@ namespace Il2CppDumper
                     Directory.Delete("DummyDll", true);
                 Directory.CreateDirectory("DummyDll");
                 Directory.SetCurrentDirectory("DummyDll");
-                File.WriteAllBytes("Il2CppDummyDll.dll", Resource1.Il2CppDummyDll);
                 var dummy = new DummyAssemblyCreator(metadata, il2cpp);
                 foreach (var assembly in dummy.Assemblies)
                 {
