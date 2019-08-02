@@ -1,0 +1,37 @@
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-latest'
+    mac:
+      imageName: 'macos-latest'
+    windows:
+      imageName: 'windows-latest'
+
+pool:
+  vmImage: $(imageName)
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: sudo apt-get update && sudo apt install zlib1g-dev libkrb5-dev
+  displayName: Install dependencies
+  condition: eq(variables['Agent.OS'], 'Linux')
+- script: choco install -y 7zip
+  displayName: Install dependencies
+  condition: eq(variables['Agent.OS'], 'Windows_NT')
+- script: dotnet restore
+  displayName: Restore NuGet packages
+- task: DotNetCoreCLI@2
+  displayName: Build DLL artifact
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+- script: bash .ci/corert-step.sh '$(Agent.OS)' '$(buildConfiguration)'
+  displayName: Publish and emit native executable
+- task: PublishPipelineArtifact@0
+  displayName: 'Upload to artifact depot'
+  inputs:
+    artifactName: $(Agent.JobName)
+    targetPath: $(Build.ArtifactStagingDirectory)/
