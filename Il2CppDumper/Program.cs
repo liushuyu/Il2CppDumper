@@ -790,7 +790,8 @@ namespace Il2CppDumper
                 {
                     var typeIndex = metadata.attributeTypes[attributeTypeRange.start + i];
                     var methodPointer = il2cpp.customAttributeGenerators[index];
-                    sb.AppendFormat("{0}[{1}] // RVA: 0x{2:X} Offset: 0x{3:X}\n", padding, GetTypeName(il2cpp.types[typeIndex]), methodPointer, il2cpp.MapVATR(methodPointer));
+                    string ptrAddress = String.Format("0x{0:X}", il2cpp.MapVATR(methodPointer)); // workaround for CoreRT
+                    sb.AppendFormat("{0}[{1}] // RVA: 0x{2:X} Offset: {3}\n", padding, GetTypeName(il2cpp.types[typeIndex]), methodPointer, ptrAddress);
                 }
                 return sb.ToString();
             }
