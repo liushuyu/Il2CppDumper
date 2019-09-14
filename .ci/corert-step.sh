@@ -14,6 +14,7 @@ Darwin)
 esac
 if [[ "x$DOTNET_OS" != 'xwin' ]]; then
     echo '##vso[task.logissue type=warning]Workaround for ILC applied.'
+    find "${NUGET_PACKAGES}/"runtime.*.microsoft.dotnet.ilcompiler -name 'ilc' -exec chmod 0777 '{}' ';'
     CC_PATH="$(command -v clang)" || exit 1
     ln -sv "${CC_PATH}" 'clang-3.9'
     export PATH="$PATH":"$(pwd)"
