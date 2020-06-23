@@ -32,5 +32,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ida.py" />
+    <EmbeddedResource Include="ida_with_struct.py" />
+    <EmbeddedResource Include="ghidra.py" />
+  </ItemGroup>
 
 </Project>
